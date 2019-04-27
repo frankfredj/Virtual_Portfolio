@@ -34,6 +34,23 @@ test_pf.add_single_shares("AAPL", 5)
 test_pf.add_vector_shares([15,12,19,5,6,13,15,12,19,5,6])
 ```
 
+# Rates
+
+The default borrowing rate is 0.05, whereas the default risk-free rate is 0.025. To modify these parameters, use the following **set_...(r)** methods:
+
+```python
+test_pf.set_borrowing_rate(0.039)
+test_pf.set_risk_free_rate(0.241)
+```
+
+# Updating the Portfolio
+
+To update the value of your stock equity and update your debt with respect to the borrowing rate (effective annual converted to continuous - unit time in seconds), use the **update()** method:
+
+```python
+test_pf.update()
+```
+
 
 
 
