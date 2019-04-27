@@ -51,6 +51,41 @@ To update the value of your stock equity and update your debt with respect to th
 test_pf.update()
 ```
 
+# Loading historical data
+
+## Yahoo historical prices
+
+To update the historical data spreadsheets accoding to a certain date range, use **update_historical_data(start_date, end_date)** method:
+
+```python
+test_pf.update_historical_data("2018-04-26", "2019-02-26")
+```
+
+*Date formating needs to be Y%-%m-%d*
+
+To extend the historical data up to the current date, use the **bridge_historical_data()** method:
+
+```python
+test_pf.bridge_historical_data()
+```
+
+## Option prices (experimental)
+
+Scrapping the Barchart.com website has proven to be too much of an hard task given my limited html knowledge. However, I've devised an efficient (but slow) way to obtain the price tables by using Selenium alongside the OS clipboard. It basically copy-pastes the webpage's text and retrieves the table by formating the resulting string. 
+
+Two methods are currently avaible: one for single stocks (**store_option_prices(ticker, expiration)**) and one for stock lists (**store_option_prices_list(tickers, expirations)**).
+
+```python
+tickers = test_pf.stocks
+expirations = []
+
+for i in range(len(tickers)):
+	expirations.append("2019-05-26")
+  
+test_pf.store_option_prices_list(tickers, expirations)
+```
+
+*Since only a handful of expiration dates are avaible, the closest date will be selected.*
 
 
 
