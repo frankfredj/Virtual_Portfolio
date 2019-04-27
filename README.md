@@ -43,6 +43,12 @@ test_pf.set_borrowing_rate(0.039)
 test_pf.set_risk_free_rate(0.241)
 ```
 
+To set the risk free rate to the 1 month Daily Treasury Yield Curve Rate, use the **set_risk_free_rate_t_bill()** method:
+
+```python
+test_pf.set_risk_free_rate_t_bill()
+```
+
 # Updating the Portfolio
 
 To update the value of your stock equity and update your debt with respect to the borrowing rate (effective annual converted to continuous - unit time in seconds), use the **update()** method:
@@ -86,6 +92,15 @@ test_pf.store_option_prices_list(tickers, expirations)
 ```
 
 *Since only a handful of expiration dates are avaible, the closest date will be selected.*
+
+*Selenium browser couldn't be ran in headless mode - this is inconvenient, but necessary to be able to use the clipboard in conjunction with Selenium*
+
+
+# Purchasing options (experimental)
+
+## Step-by-step with textbox prompts
+
+
 
 
 
