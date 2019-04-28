@@ -103,6 +103,8 @@ test_pf.update_option_price_list(tickers)
 
 # Extracting Call and Put Options data tables
 
+## Date specific
+
 Option data **__which has been previously downloaded__** can be extracted and visualised via the **get_call_put_data(ticker, expiration, option_type)** method:
 
 
@@ -116,6 +118,18 @@ print(AAPL_Call_DataFrame)
 ```
 
 *Call and Put have to be capitalised.The option with the closest exercise date will be returned if no matches are found.*
+
+## Stock specific
+
+To retrieve all data pertaining to a given stock, use the **get_call_put_data_ALL(ticker, option)** method:
+
+```python
+ticker = "AAPL"
+option = "Put"
+
+AAPL_Put_DataFrame = test_pf.get_call_put_data_ALL(ticker, option)
+print(AAPL_Put_DataFrame)
+```
 
 
 # Purchasing Call and Put Options
@@ -146,6 +160,93 @@ test_pf.exercise_put_call()
 ```
 
 *The current date is used to check if any options should have been exercised since last checked. Yhaoo daily High / Low prices are used to determine if options should have been exercised on their respective expiration dates. Said prices are also used to purchase missing shares if need be (i.e.: Put).*
+
+
+# Retrieving grouped data
+
+## Historical Close
+
+To retrieve **__previously downloaded__** historical close prices, use the **get_historical_close()** method:
+
+```python
+Close_Price_dataframe = test_pf.get_historical_close()
+print(Close_Price_dataframe)
+
+```
+
+## Historical Returns
+
+To retrieve historical returns, use the **get_historical_returns()** method: 
+
+```python
+Returns_dataframe = test_pf.get_historical_returns()
+print(Returns_dataframe)
+
+```
+
+## Historical Log Returns
+
+To retrieve historical log-returns, use the **get_historical_log_returns()** method: 
+
+```python
+Log_returns_dataframe = test_pf.get_historical_log_returns()
+print(Log_returns_dataframe)
+
+```
+
+## Historical Percentage Returns
+
+To retrieve historical log-returns, use the **get_historical_perc_returns()** method: 
+
+```python
+Perc_returns_dataframe = test_pf.get_historical_perc_returns()
+print(Perc_returns_dataframe)
+
+```
+
+
+
+# Portfolio weights
+
+## Lowest Variance
+
+To get the weights of the lowest-variance portfolio, use the **get_lowest_variance_pf_weights()** method:
+
+```python
+lowest_variance_w = test_pf.get_lowest_variance_pf_weights()
+print(lowest_variance_w)
+
+```
+
+*Returns the scaled eigenvector of the variance-covariance matrix with the lowest associated eigenvalue.*
+
+
+## Principal Component (highest eigenvalue)
+
+To get the weights of the principal-component portfolio, use the **get_eigen_pf_weights()** method:
+
+```python
+eigen_w = test_pf.get_eigen_pf_weights()
+print(eigen_w)
+
+```
+
+*Returns the scaled eigenvector of the variance-covariance matrix with the highest associated eigenvalue.*
+
+## Highest Sharpe Ratio
+
+To get the weights of the highest Sharpe Ratio portfolio, use the **get_sharpe_weights()** method:
+
+```python
+Sharpe_w = test_pf.get_sharpe_weights()
+print(Sharpe_w)
+
+```
+
+*Weights are computed using the multivariate version of Newton's Method using the exact Hessian's inverse*
+
+
+
 
 
 
