@@ -100,28 +100,58 @@ test_pf.update_option_price_list(tickers)
 
 *An headless chrome driver is used via Selenium to access the Yahoo Option webpage. This is due to Beautiful Soup not being able to locate the drop-down menu options, which are needed to switch between avaible exercise dates. From there, the text values of the drop-down menu are converted into the proper Yahoo UNIX format, then used to build url request strings. Said strings are fed to Requests and Beautiful Soup before being converted to proper dataframes using Prandas' .read_html(...)*
 
-Two methods are currently avaible: one for single stocks (**store_option_prices(ticker, expiration)**) and one for stock lists (**store_option_prices_list(tickers, expirations)**).
+
+# Extracting Call and Put Options data tables
+
+Option data **__which has been previously downloaded__** can be extracted and visualised via the **get_call_put_data(ticker, expiration, option_type)** method:
+
 
 ```python
-tickers = test_pf.stocks
-expirations = []
+ticker = "AAPL"
+expiration = "2019-05-24"
+option_type = "Call"
 
-for i in range(len(tickers)):
-	expirations.append("2019-05-26")
-  
-test_pf.store_option_prices_list(tickers, expirations)
+AAPL_Call_DataFrame = test_pf.get_call_put_data(ticker, expiration, option_type)
+print(AAPL_Call_DataFrame)
 ```
 
-*Since only a handful of expiration dates are avaible, the closest date will be selected.*
-
-*Selenium browser couldn't be ran in headless mode - this is inconvenient, but necessary to be able to use the clipboard in conjunction with Selenium*
+*Call and Put have to be capitalised.The option with the closest exercise date will be returned if no matches are found.*
 
 
-# Purchasing options (experimental)
+# Purchasing Call and Put Options
 
-## Step-by-step with textbox prompts
+To purchased call and put options based on avaible data, use the **buy_call_put_from_data(ticker, expiration, strike, n_purchase, option_type)** method:
+
+```python
+ticker = "AAPL"
+expiration = "2019-05-24"
+strike = 217.5
+n_purchase = 12
+option_type ="Call"
+
+test_pf.buy_call_put_from_data(ticker, expiration, strike, n_purchase, option_type)
+
+```
+
+*Call and Put have to be capitalised.The option with the closest exercise date will be returned if no matches are found. A cubic spline is used to model Ask = f(Strike) within the data's range.*
+
+# Exercising Call and Put Options
+
+To exercise call and put options, use the **exercise_put_call()** method:
 
 
+```python
+test_pf.exercise_put_call()
+
+```
+
+*The current date is used to check if any options should have been exercised since last checked. Yhaoo daily High / Low prices are used to determine if options should have been exercised on their respective expiration dates. Said prices are also used to purchase missing shares if need be (i.e.: Put).*
+
+
+
+```python
+
+```
 
 
 
