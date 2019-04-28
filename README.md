@@ -75,9 +75,30 @@ To extend the historical data up to the current date, use the **bridge_historica
 test_pf.bridge_historical_data()
 ```
 
-## Option prices (experimental)
+## T-Bill rates
 
-Scrapping the Barchart.com website has proven to be too much of an hard task given my limited html knowledge. However, I've devised an efficient (but slow) way to obtain the price tables by using Selenium alongside the OS clipboard. It basically copy-pastes the webpage's text and retrieves the table by formating the resulting string. 
+To load the most recent T-Bill rates, use the **get_T_bill_rates()** method:
+
+```python
+test_pf.get_T_bill_rates()
+```
+
+*The rates are stored in **self.t_bill_rates** as a pandas DataFrame object*
+
+## Option prices 
+
+To load available call and put option prices from Yahoo, use the **update_option_price(ticker)** and **update_option_price_list(tickers)** methods:
+
+```python
+ticker = "AAPL"
+test_pf.update_option_price(ticker)
+
+#Get option prices for the remaining stocks
+tickers = test_pf.stocks[1:]
+test_pf.update_option_price_list(tickers)
+```
+
+*Custom scrapper method: An headless chrome driver is used via Selenium to access the Yahoo Option webpage. This is due to Beautiful Soup not being able to locate the drop-down menu options, which are needed to switch between avaible exercise dates. From there, the text values of the drop-down menu are converted into the proper Yahoo UNIX format, then used to build url request strings. Said strings are fed to Requests and Beautiful Soup before being converted to proper dataframes using Prandas' **.read_html(...)** *
 
 Two methods are currently avaible: one for single stocks (**store_option_prices(ticker, expiration)**) and one for stock lists (**store_option_prices_list(tickers, expirations)**).
 
