@@ -157,7 +157,7 @@ print(AAPL_Historical_DataFrame)
 ```
 
 
-## Purchasing Call and Put Options
+# Purchasing Call and Put Options
 
 To purchased call and put options based on avaible data, use the **buy_call_put_from_data(ticker, expiration, strike, n_purchase, option_type)** method:
 
