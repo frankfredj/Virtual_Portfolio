@@ -268,7 +268,7 @@ print(Sharpe_w)
 
 ```
 
-*Weights are computed using the multivariate version of Newton's Method using the exact Hessian's inverse*
+*Weights are computed using the multivariate version of Newton's Method using the exact Hessian's inverse.*
 
 
 
