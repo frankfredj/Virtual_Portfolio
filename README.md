@@ -143,7 +143,7 @@ AAPL_Put_DataFrame = test_pf.get_call_put_data_ALL(ticker, option)
 print(AAPL_Put_DataFrame)
 ```
 
-# Historical Low, High and Close by date range
+## Historical Low, High and Close by date range
 
 To retrieve standard Yahoo data, use the **extract_historical_data_over_date_range(ticker, frm, to)** method:
 
@@ -157,7 +157,7 @@ print(AAPL_Historical_DataFrame)
 ```
 
 
-# Purchasing Call and Put Options
+## Purchasing Call and Put Options
 
 To purchased call and put options based on avaible data, use the **buy_call_put_from_data(ticker, expiration, strike, n_purchase, option_type)** method:
 
