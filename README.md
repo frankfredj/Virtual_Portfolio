@@ -100,10 +100,22 @@ test_pf.update_option_price_list(tickers)
 
 *An headless chrome driver is used via Selenium to access the Yahoo Option webpage. This is due to Beautiful Soup not being able to locate the drop-down menu options, which are needed to switch between avaible exercise dates. From there, the text values of the drop-down menu are converted into the proper Yahoo UNIX format, then used to build url request strings. Said strings are fed to Requests and Beautiful Soup before being converted to proper dataframes using Prandas' .read_html(...)*
 
+## Option Greeks
 
-# Extracting Call and Put Options data tables
+to load avaible option Greeks, use the **update_greeks(ticker, nmonths)** method:
 
-## Date specific
+```python
+#Load the Greeks for options expiring within the next 3 months
+for stock in test_pf.stocks:
+    test_pf.update_greeks(stock, 3)
+```
+
+*The web scrapper itself is avaible via the **scrape_option_greeks(ticker, nmonts)** method. Note that nmonths here stands for the month itself, i.e.: 0 for this month, 1 for the next, ect. .*
+
+
+# Extracting Data from the .xlsx file
+
+## Calls and Puts, date specific
 
 Option data **__which has been previously downloaded__** can be extracted and visualised via the **get_call_put_data(ticker, expiration, option_type)** method:
 
@@ -119,7 +131,7 @@ print(AAPL_Call_DataFrame)
 
 *Call and Put have to be capitalised.The option with the closest exercise date will be returned if no matches are found.*
 
-## Stock specific
+## Calls and Puts, stock specific
 
 To retrieve all data pertaining to a given stock, use the **get_call_put_data_ALL(ticker, option)** method:
 
@@ -129,6 +141,19 @@ option = "Put"
 
 AAPL_Put_DataFrame = test_pf.get_call_put_data_ALL(ticker, option)
 print(AAPL_Put_DataFrame)
+```
+
+# Historical Low, High and Close by date range
+
+To retrieve standard Yahoo data, use the **extract_historical_data_over_date_range(ticker, frm, to)** method:
+
+```python
+ticker = "AAPL"
+frm = "2018-08-28"
+to = "2019-03-28"
+
+AAPL_Historical_DataFrame = test_pf.extract_historical_data_over_date_range(ticker, frm, to)
+print(AAPL_Historical_DataFrame)
 ```
 
 
