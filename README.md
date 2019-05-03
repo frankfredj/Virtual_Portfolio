@@ -15,23 +15,23 @@ a new xlsx document to save portfolio informations.*
 # Unlocking stocks
 
 By default, a Portfolio object doesn't contain any stocks. Its .xslx file wasn't initated with multiple pages for each available commodity
-on the market (obviously). To create new sheets that will be able to store data pertaining to specific stocks, use the **add_stock(tickers)** method:
+on the market (obviously). To create new sheets that will be able to store data pertaining to specific stocks, use the **unlock_stock(tickers)** method:
 
 ```python
-tickers = ["AAPL", "SasaAsa", "BO", "BA", "CN", "WM", "TLSE", "MCS", "TMS", "GOOG", "AMZN", "DIS", "NFLX", "AIR.PA", "LMT"]
-test_pf.add_stock(tickers)
+tickers = ["AAPL", "SasaAsa", "BO", "BA", "CN", "WM", "GOOG"]
+test_pf.unlock_stock(tickers)
 ```
 
 # Purchasing stock shares
 
-There are two ways to purchase shares once you've unlocked stocks. You can either pass a single ticker name along with the desired number of shares with the **add_single_shares(ticker, amount)** method, or pass a vector to the **add_vector_shares(amounts)** method. 
+There are two ways to purchase shares once you've unlocked stocks. You can either pass a single ticker name along with the desired number of shares with the **buy_single_shares(ticker, amount)** method, or pass a vector to the **buy_vector_shares(amounts)** method. 
 
 *If using the vectorised method, one must provide a vector of length equal to the number of unlocked stocks.*
 
 
 ```python
-test_pf.add_single_shares("AAPL", 5)
-test_pf.add_vector_shares([15,12,19,5,6,13,15,12,19,5,6])
+test_pf.buy_single_shares("AAPL", 5)
+test_pf.buy_vector_shares([15,12,19,5,13])
 ```
 
 # Rates
@@ -43,7 +43,7 @@ test_pf.set_borrowing_rate(0.039)
 test_pf.set_risk_free_rate(0.241)
 ```
 
-To set the risk free rate to the 1 month Daily Treasury Yield Curve Rate, use the **set_risk_free_rate_t_bill()** method:
+To set the risk free rate to the most recent 1 year Daily Treasury Yield Curve Rate, use the **set_risk_free_rate_t_bill()** method:
 
 ```python
 test_pf.set_risk_free_rate_t_bill()
@@ -61,18 +61,22 @@ test_pf.update()
 
 ## Yahoo historical prices
 
-To update the historical data spreadsheets accoding to a certain date range, use **update_historical_data(start_date, end_date)** method:
+To replace the historical data spreadsheets according to a certain date range, use **replace_all_historical_data(start_date, end_date)** method:
 
 ```python
-test_pf.update_historical_data("2018-04-26", "2019-02-26")
+test_pf.replace_all_historical_data("2018-04-26", "2019-02-26")
 ```
-
-*Date formating needs to be Y%-%m-%d*
 
 To extend the historical data up to the current date, use the **bridge_historical_data()** method:
 
 ```python
 test_pf.bridge_historical_data()
+```
+
+To update missing stock data based on previously uploaded data's date range, use **fill_missing_historical_data()**
+
+```python
+test_pf.fill_missing_historical_data()
 ```
 
 ## T-Bill rates
@@ -105,9 +109,9 @@ test_pf.update_option_price_list(tickers)
 to load avaible option Greeks, use the **update_greeks(ticker, nmonths)** method:
 
 ```python
-#Load the Greeks for options expiring within the next 3 months
+#Load the Greeks for options expiring within the next 2 months
 for stock in test_pf.stocks:
-    test_pf.update_greeks(stock, 3)
+    test_pf.update_greeks(stock, 1)
 ```
 
 *The web scrapper itself is avaible via the **scrape_option_greeks(ticker, nmonts)** method. Note that nmonths here stands for the month itself, i.e.: 0 for this month, 1 for the next, ect. .*
@@ -115,45 +119,19 @@ for stock in test_pf.stocks:
 
 # Extracting Data from the .xlsx file
 
-## Calls and Puts, date specific
-
-Option data **__which has been previously downloaded__** can be extracted and visualised via the **get_call_put_data(ticker, expiration, option_type)** method:
-
+The general syntax to extract sheets as pandas DataFrame is:
 
 ```python
-ticker = "AAPL"
-expiration = "2019-05-24"
-option_type = "Call"
+test_pf.extract_historical_data("AAPL")
+test_pf.extract_calls("AAPL")
+test_pf.extract_greeks_calls("GOOG")
 
-AAPL_Call_DataFrame = test_pf.get_call_put_data(ticker, expiration, option_type)
-print(AAPL_Call_DataFrame)
-```
+test_pf.extract_adjusted_close()
+test_pf.extract_adjusted_close_over_range("2018-02-20", "April 24 2019")
 
-*Call and Put have to be capitalised.The option with the closest exercise date will be returned if no matches are found.*
+test_pf.extract_greeks_puts_date("GOOG", "June 24 2019")
+test_pf.extract_calls_date("GOOG", "June 24 2019")
 
-## Calls and Puts, stock specific
-
-To retrieve all data pertaining to a given stock, use the **get_call_put_data_ALL(ticker, option)** method:
-
-```python
-ticker = "AAPL"
-option = "Put"
-
-AAPL_Put_DataFrame = test_pf.get_call_put_data_ALL(ticker, option)
-print(AAPL_Put_DataFrame)
-```
-
-## Historical Low, High and Close by date range
-
-To retrieve standard Yahoo data, use the **extract_historical_data_over_date_range(ticker, frm, to)** method:
-
-```python
-ticker = "AAPL"
-frm = "2018-08-28"
-to = "2019-03-28"
-
-AAPL_Historical_DataFrame = test_pf.extract_historical_data_over_date_range(ticker, frm, to)
-print(AAPL_Historical_DataFrame)
 ```
 
 
@@ -219,13 +197,12 @@ print(Log_returns_dataframe)
 
 ```
 
-## Historical Percentage Returns
+## Returns over a date range
 
-To retrieve historical log-returns, use the **get_historical_perc_returns()** method: 
+The general syntax to retrieve returns over a date range is:
 
 ```python
-Perc_returns_dataframe = test_pf.get_historical_perc_returns()
-print(Perc_returns_dataframe)
+test_pf.get_historical_returns_over_range("May 14 2017", "2019/04/26")
 
 ```
 
@@ -241,9 +218,10 @@ To get the weights of the lowest-variance portfolio, use the **get_lowest_varian
 lowest_variance_w = test_pf.get_lowest_variance_pf_weights()
 print(lowest_variance_w)
 
-```
+lowest_variance_w2 = test_pf.get_lowest_variance_pf_over_range("June 14 2018", "2019/04/26")
+print(lowest_variance_w2)
 
-*Returns the scaled eigenvector of the variance-covariance matrix with the lowest associated eigenvalue.*
+```
 
 
 ## Principal Component (highest eigenvalue)
@@ -271,12 +249,24 @@ print(Sharpe_w)
 *Weights are computed using the multivariate version of Newton's Method using the exact Hessian's inverse.*
 
 
+## Historical implied returns and volatility
 
+To compute the return and implied volatility over a date range, use **get_ANNUAL_implied_return_and_volatility(ticker, frm, to)** :
+
+
+```python
+test_pf.get_ANNUAL_implied_return_and_volatility("AAPL", "June 14 2018", "2019/04/26")
+
+```
+
+##Detailed portfolio analysis
+
+To obtain various statistical measures such as reaturns, volatilities, variances, covariances, correlations, Greeks, ect. over a date range, use **analyse_time_frame(frm, to)** 
 
 
 
 ```python
-
+data = test_pf.analyse_time_frame("June 14 2016", "2019/04/26")
 ```
 
 
