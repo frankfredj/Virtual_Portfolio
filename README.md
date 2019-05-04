@@ -259,7 +259,7 @@ test_pf.get_ANNUAL_implied_return_and_volatility("AAPL", "June 14 2018", "2019/0
 
 ```
 
-##Detailed portfolio analysis
+## Detailed portfolio analysis
 
 To obtain various statistical measures such as reaturns, volatilities, variances, covariances, correlations, Greeks, ect. over a date range, use **analyse_time_frame(frm, to)** 
 
@@ -267,6 +267,20 @@ To obtain various statistical measures such as reaturns, volatilities, variances
 
 ```python
 data = test_pf.analyse_time_frame("June 14 2016", "2019/04/26")
+```
+
+# Statistics
+
+Various metrics are avaible, all with general syntax:
+
+```python
+test_pf.get_covariance_matrix_from_close()
+test_pf.get_covariance_matrix_from_close_over_range("June 14 2018", "2019/04/26")
+
+test_pf.get_covariance_matrix_from_log_returns()
+test_pf.get_covariance_matrix_from_returns()
+
+test_pf.get_correlation_matrix_from_log_returns()
 ```
 
 
